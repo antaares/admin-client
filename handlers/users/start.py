@@ -39,11 +39,14 @@ async def bot_start(message: types.Message, state: FSMContext):
 @dp.message_handler(state=ClientForm.InputID)
 async def get_client_id(message: types.Message, state: FSMContext):
     client_id = message.text
-    file_id = db.select_file_id(client_id=client_id)
-    if file_id is None:
-        await message.answer("Xato yuz berdi!\nBunday ID raqam mavjud emas!\nIltimos, qaytadan urinib ko‘ring!")
+    if db.check_id(client_id):
+        await message.answer(
+            text="Bu ID raqam avval ro'yxatdan o'tgan!"
+        )
         await state.finish()
-        return await ClientForm.InputID.set()
+        await ClientForm.InputID.set()
+        return
+    file_id = db.select_file_id(client_id)
     await message.answer_document(
         document=file_id,
         caption=f"{client_id} - Mijoz fayli!"

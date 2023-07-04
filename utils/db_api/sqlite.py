@@ -42,6 +42,15 @@ class Database:
             f"{item} = ?" for item in parameters
         ])
         return sql, tuple(parameters.values())
+
+
+    def check_id(self, client_id: int):
+        sql = "SELECT client_id FROM Users"
+        result = self.execute(sql, fetchall=True)
+        array = [i[0] for i in result]
+        if client_id in array:
+            return True
+        return False
     
 
     def add_client(self, client_id: int, file_id: str):
