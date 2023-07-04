@@ -26,7 +26,7 @@ async def start_add_client(message: types.Message, state: FSMContext):
 @dp.message_handler(state=AdminForm.InputID)
 async def get_client_id(message: types.Message, state: FSMContext):
     client_id = message.text
-    if db.check_id(client_id):
+    if db.check_id(int(client_id)):
         await message.answer(
             text="Bu ID raqam avval ro'yxatdan o'tgan!"
         )
