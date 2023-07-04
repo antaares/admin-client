@@ -26,6 +26,13 @@ async def start_add_client(message: types.Message, state: FSMContext):
 @dp.message_handler(state=AdminForm.InputID)
 async def get_client_id(message: types.Message, state: FSMContext):
     client_id = message.text
+    if db.check_id(client_id):
+        await message.answer(
+            text="Bu ID raqam avval ro'yxatdan o'tgan!"
+        )
+        await state.finish()
+        await AdminForm.InputID.set()
+        return
     await state.update_data(client_id=client_id)
     await message.answer(
         text="Qabul qildim, Menga mijoz uchun kerakli faylni yuboring.\n*Faqat bitta fayl qabul qilinadi!"
